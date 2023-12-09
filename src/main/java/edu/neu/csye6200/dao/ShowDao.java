@@ -8,6 +8,8 @@ public interface ShowDao {
     List<Show> getAllShowsByMovieId(int movieId);
 
     Show getShowById(int id);
+    
+    List<Integer> getShowsByScreenId(int screenId);
 
     void addShow(Show show);
     

@@ -11,8 +11,6 @@ public interface ScreenDao {
 
     void addScreen(Screen screen);
     
-    int addTheatreToScreen(int screenId);
-    
     void updateScreen(Screen screen);
     
     void deleteScreen(int id);

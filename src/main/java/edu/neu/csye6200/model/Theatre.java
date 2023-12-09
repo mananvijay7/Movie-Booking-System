@@ -7,17 +7,13 @@ public class Theatre {
 	private String name;
 	List<Integer> screens;
 	
-	public Theatre(String theatre_name){
-		name = theatre_name;
-	}
-	
-	public Theatre(int theatre_id, String theatre_name){
-		id = theatre_id;
-		name = theatre_name;
-	}
-	
 	public Theatre(int theatre_id, String theatre_name, List<Integer> sr){
 		id = theatre_id;
+		name = theatre_name;
+		screens = sr;
+	}
+	
+	public Theatre(String theatre_name, List<Integer> sr){
 		name = theatre_name;
 		screens = sr;
 	}
@@ -41,7 +37,7 @@ public class Theatre {
 	}
 	@Override
 	public String toString() {
-		return "id= " + id + ", name= " + name + ", screens id=" + screens.toString();
+		return "id= " + id + ", name= " + name + ", screens id=" + screens.toString() + "\n";
 	}  
 
 }

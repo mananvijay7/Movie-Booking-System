@@ -7,9 +7,24 @@ public class Booking {
     private int id;
     private int showId;
     private Date bookingDate;
-    private List<Seat> bookedSeats;
+    private List<Integer> bookedSeats;
     private int customerId;
     	
+	public Booking(int showId, Date bookingDate, List<Integer> bookedSeats, int customerId) {
+		super();
+		this.showId = showId;
+		this.bookingDate = bookingDate;
+		this.bookedSeats = bookedSeats;
+		this.customerId = customerId;
+	}
+	public Booking(int id, int showId, Date bookingDate, List<Integer> bookedSeats, int customerId) {
+		super();
+		this.id = id;
+		this.showId = showId;
+		this.bookingDate = bookingDate;
+		this.bookedSeats = bookedSeats;
+		this.customerId = customerId;
+	}
 	public int getId() {
 		return id;
 	}
@@ -28,10 +43,10 @@ public class Booking {
 	public void setBookingDate(Date bookingDate) {
 		this.bookingDate = bookingDate;
 	}
-	public List<Seat> getBookedSeats() {
+	public List<Integer> getBookedSeats() {
 		return bookedSeats;
 	}
-	public void setBookedSeats(List<Seat> bookedSeats) {
+	public void setBookedSeats(List<Integer> bookedSeats) {
 		this.bookedSeats = bookedSeats;
 	}
 	public int getCustomerId() {
@@ -42,7 +57,7 @@ public class Booking {
 	}
 	@Override
 	public String toString() {
-		return "Booking [id=" + id + "]";
+		return "Booking [id=" + id + " show time= " + bookingDate + " Booked seats = " + bookedSeats.toString() + "]";
 	}
         
 }

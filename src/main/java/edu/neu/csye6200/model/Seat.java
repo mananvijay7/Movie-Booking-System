@@ -1,17 +1,32 @@
 package edu.neu.csye6200.model;
 
 public class Seat {
+	private int seatId;
 	private int seatNumber;
 	private String seatRow;
 	private String seatClass;
 	private int screenId;
 	
+	public Seat(int seatId, int seatNumber, String seatRow, String seatClass, int screenId) {
+		super();
+		this.seatId = seatId;
+		this.seatNumber = seatNumber;
+		this.seatRow = seatRow;
+		this.seatClass = seatClass;
+		this.screenId = screenId;
+	}
 	public Seat(int seatNumber, String seatRow, String seatClass, int screenId) {
 		super();
 		this.seatNumber = seatNumber;
 		this.seatRow = seatRow;
 		this.seatClass = seatClass;
 		this.screenId = screenId;
+	}
+	public int getSeatId() {
+		return seatId;
+	}
+	public void setSeatId(int seatId) {
+		this.seatId = seatId;
 	}
 	public int getSeatNumber() {
 		return seatNumber;

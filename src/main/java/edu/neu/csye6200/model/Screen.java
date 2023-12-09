@@ -8,11 +8,12 @@ public class Screen {
 	private int theatreId;
 	private List<Integer> shows;
 	
-	public Screen(int id, int capacity, int theatre_id) {
+	public Screen(int id, int capacity, int theatre_id, List<Integer> showIds) {
 		super();
 		this.screenNumber = id;
 		this.seatingCapacity = capacity;
 		this.theatreId = theatre_id;
+		this.shows = showIds;
 	}
 	
 	public Screen(int id, int capacity, List<Integer> showIds) {
@@ -48,7 +49,7 @@ public class Screen {
 	}
 	@Override
 	public String toString() {
-		return "id= " + screenNumber + ", capacity= " + seatingCapacity + ", theatre id = " + theatreId;
+		return "id= " + screenNumber + ", capacity= " + seatingCapacity + ", theatre id = " + theatreId + "\n";
 	}  
 
 }

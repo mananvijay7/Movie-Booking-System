@@ -23,13 +23,13 @@ public class ShowDaoImpl implements ShowDao {
 			String sqlQuery = "select * from movie_show where movie_Id = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setInt(1, movieId);
-			rs = ps.executeQuery(sqlQuery);
+			rs = ps.executeQuery();
 			
 			while(rs.next()) {
 				int showId = rs.getInt("show_Id");
 				Date showTime = rs.getDate("show_Time");
 				int movie_id = rs.getInt("movie_Id");
-				int screenid = rs.getInt("screen_Id");		
+				int screenid = rs.getInt("screen_Number");		
 				allShows.add(new Show(showId, showTime, movie_id, screenid));
 			}
 		} catch (SQLException e) {
@@ -53,7 +53,7 @@ public class ShowDaoImpl implements ShowDao {
 				int showId = rs.getInt("show_Id");
 				Date showTime = rs.getDate("show_Time");
 				int movie_id = rs.getInt("movie_Id");
-				int screenid = rs.getInt("screen_Id");		
+				int screenid = rs.getInt("screen_Number");		
 				return new Show(showId, showTime, movie_id, screenid);
 			}
 		} catch (SQLException e) {
@@ -64,9 +64,32 @@ public class ShowDaoImpl implements ShowDao {
 	}
 
 	@Override
+	public List<Integer> getShowsByScreenId(int screenId){
+		List<Integer> shows = new ArrayList<Integer>();
+		ResultSet rs = null;
+		try {
+			String sqlQuery = "select show_Id from movie_show where screen_Number = ?";
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			ps.setInt(1,screenId);
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int showId = rs.getInt("show_Id");
+				shows.add(showId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+		return shows;
+
+	}
+	
+	@Override
 	public void addShow(Show show) {
 		try {
-			String sqlQuery = "INSERT INTO movie_show (show_Time,movie_Id,screen_Id) VALUES (?,?,?)";
+			String sqlQuery = "INSERT INTO movie_show (show_Time,movie_Id,screen_Number) VALUES (?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			
 			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -116,7 +139,6 @@ public class ShowDaoImpl implements ShowDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 }

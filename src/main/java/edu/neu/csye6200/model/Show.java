@@ -4,6 +4,12 @@ import java.util.Date;
 import java.util.Map;
 
 public class Show {
+	private int showId;
+	private Date showTime;
+	private int movieId; 
+	private int screenId;
+	private Map<Integer, Boolean> seatAvailability;
+	
 	public Show(int showId, Date showTime, int movieId, int screenId) {
 		super();
 		this.showId = showId;
@@ -16,13 +22,7 @@ public class Show {
 		this.showTime = showTime;
 		this.movieId = movieId;
 		this.screenId = screenId;
-	}
-	private int showId;
-	private Date showTime;
-	private int movieId; 
-	private int screenId;
-	private Map<Integer, Boolean> seatAvailability;
-	
+	}	
 	public int getShowId() {
 		return showId;
 	}
@@ -53,4 +53,9 @@ public class Show {
 	public void setSeatAvailability(Map<Integer, Boolean> seatAvailability) {
 		this.seatAvailability = seatAvailability;
 	}
+	@Override
+	public String toString() {
+		return "Show Id = " + showId + ", Show Time= " + showTime + ", Movie ID = " 
+	               + movieId + ", Screen Id = " + screenId + "\n";
+	} 
 }

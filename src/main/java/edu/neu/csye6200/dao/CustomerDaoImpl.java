@@ -42,17 +42,17 @@ public class CustomerDaoImpl implements CustomerDao {
 	public Customer getCustomerById(int id) {
 		ResultSet rs = null;
 		try {
-			String sqlQuery = "select * from customer where customer_id = ?";
+			String sqlQuery = "select * from customer where id = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setInt(1,id);
 			
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				int customerId = rs.getInt("customer_id");
-				String email = rs.getString("customer_email");
-				String password = rs.getString("customer_password");
-				String name = rs.getString("customer_name");		
+				int customerId = rs.getInt("id");
+				String email = rs.getString("email");
+				String password = rs.getString("password");
+				String name = rs.getString("name");		
 				return new Customer(customerId, email, password, name);
 			}
 		} catch (SQLException e) {
@@ -65,13 +65,12 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public void addCustomer(Customer customer) {
 		try {
-			String sqlQuery = "INSERT INTO CUSTOMER (customer_email, customer_password, customer_name, customer_login) VALUES (?,?,?,?)";
+			String sqlQuery = "INSERT INTO CUSTOMER (EMAIL, PASSWORD, NAME) VALUES (?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 	        
 			ps.setString(1, customer.getEmail());
 			ps.setString(2, customer.getPassword());
 			ps.setString(3, customer.getName());
-                        ps.setString(4, customer.getEmail());
 			int customerAdded = ps.executeUpdate();
 			
             System.out.println("execute boolean output = " + customerAdded + "\n");			
@@ -131,30 +130,5 @@ public class CustomerDaoImpl implements CustomerDao {
 		}
 
 	}
-
-    @Override
-    public Customer getCustomerByEmail(String email) {
-                ResultSet rs = null;
-		try {
-			String sqlQuery = "select * from customer where customer_email = ?";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setString(1,email);
-			
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				int customerId = rs.getInt("customer_id");
-				String customer_email = rs.getString("customer_email");
-				String customer_password = rs.getString("customer_password");
-				String customer_name = rs.getString("customer_name");		
-				return new Customer(customerId, customer_email, customer_password, customer_name);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-                        return null;
-		}
-	
-		return null;
-    }
 
 }

@@ -11,9 +11,7 @@ public interface TheatreDao {
 
     void addTheatre(Theatre theatre);
     
-    void addScreensToTheatre(Theatre theatre);
-    
-    void updateTheatree(Theatre theatre);
+    void updateTheatre(Theatre theatre);
     
     void deleteTheatre(int id);
 }

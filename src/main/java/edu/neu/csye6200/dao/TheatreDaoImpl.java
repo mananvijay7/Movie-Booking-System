@@ -7,8 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-
-import edu.neu.csye6200.model.Movie;
 import edu.neu.csye6200.model.Theatre;
 import edu.neu.csye6200.repository.DatabaseConnection;
 
@@ -29,7 +27,6 @@ public class TheatreDaoImpl implements TheatreDao {
 				String theatre_name= rs.getString("theatre_name");
 				List<Integer> screens = getScreensOfTheatre(theatre_id);
 				theatres.add(new Theatre(theatre_id, theatre_name, screens));
-				//theatres.add(new Theatre(theatre_id, theatre_name));
 			}
 
 		} catch (SQLException exp) {
@@ -38,11 +35,12 @@ public class TheatreDaoImpl implements TheatreDao {
 		return theatres;
 	}
 	
-	public List<Integer> getScreensOfTheatre(int theatre_id) {
+	private List<Integer> getScreensOfTheatre(int theatre_id) {
 		List<Integer> screens = new ArrayList<Integer>();
 		ResultSet rs = null;
 		try {
-			String sqlQuery = "SELECT DISTINCT screen_Number FROM theatre_screen_mapping WHERE theatre_id = ?";
+			
+			String sqlQuery = "SELECT screen_Number FROM theatre_screen_mapping WHERE theatre_id = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setInt(1, theatre_id);
 			
@@ -88,27 +86,22 @@ public class TheatreDaoImpl implements TheatreDao {
 				+ 			"(theatre_name) "
 				+ 			"VALUES (?)";
 		
-		try {
-			
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setString(1, theatre.getName());
-			int theatreAdded = ps.executeUpdate();
-			System.out.println("execute boolean output = " + theatreAdded);
-
-			
-			if(theatreAdded > 0) {
+		try {			
+				PreparedStatement ps = connection.prepareStatement(sqlQuery, Statement.RETURN_GENERATED_KEYS);
+				ps.setString(1, theatre.getName());
+				ps.executeUpdate();
+				ResultSet generatedKeys = ps.getGeneratedKeys();
+				if (generatedKeys.next()) {
+				    int theatreId = generatedKeys.getInt(1);
+				    addScreensToTheatre(theatreId, theatre.getScreens());
+				}
 				System.out.println("Theatre added to database" + "\n");
-			} else {
-				System.out.println("Error adding theatre with " + theatre.toString());
-			}
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-
 	}
 	
-	@Override
-	public void addScreensToTheatre(Theatre theatre) {		
+	private void addScreensToTheatre(int theatreId, List<Integer> screens) {		
 		String sqlQuery = 	"INSERT INTO theatre_screen_mapping "
 				+ 			"(theatre_id, screen_Number) "
 				+ 			"VALUES (?,?)";
@@ -116,15 +109,15 @@ public class TheatreDaoImpl implements TheatreDao {
 		try {
 			int theatreAdded = 0;
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1, theatre.getId());
-			for (int screenId: theatre.getScreens()) {
+			ps.setInt(1, theatreId);
+			for (int screenId: screens) {
 				ps.setInt(2,  screenId);
 				theatreAdded = ps.executeUpdate();				
 			}
 			if(theatreAdded > 0) {
 				System.out.println("Mapping added to database");
 			} else {
-				System.out.println("Error adding mapping with " + theatre.toString());
+				System.out.println("Error adding theatre to screen mapping " + theatreId);
 			}			
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -132,7 +125,7 @@ public class TheatreDaoImpl implements TheatreDao {
 	}
 
 	@Override
-	public void updateTheatree(Theatre theatre) {
+	public void updateTheatre(Theatre theatre) {
 		// TODO Auto-generated method stub
 
 	}

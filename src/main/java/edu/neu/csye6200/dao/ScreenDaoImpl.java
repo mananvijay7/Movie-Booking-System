@@ -13,7 +13,8 @@ import edu.neu.csye6200.repository.DatabaseConnection;
 
 public class ScreenDaoImpl implements ScreenDao {
 	Connection connection = DatabaseConnection.getDbInstance();
-
+    ShowDao showDao = new ShowDaoImpl();
+    
 	@Override
 	public List<Screen> getAllScreens() {
 		List<Screen> allScreens = new ArrayList<Screen>();
@@ -27,8 +28,9 @@ public class ScreenDaoImpl implements ScreenDao {
 			while(rs.next()) {
 				int screenId = rs.getInt("screen_Number");
 				int seating_capacity = rs.getInt("seating_Capacity");	
-				int theatreId = addTheatreToScreen(screenId);
-				allScreens.add(new Screen(screenId, seating_capacity, theatreId));
+				int theatreId = getTheatreByScreen(screenId);
+				List<Integer> shows = showDao.getShowsByScreenId(screenId);
+				allScreens.add(new Screen(screenId, seating_capacity, theatreId, shows));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -50,8 +52,9 @@ public class ScreenDaoImpl implements ScreenDao {
 			while(rs.next()) {
 				int screenId = rs.getInt("screen_Number");
 				int seatingCap = rs.getInt("seating_Capacity");	
-				int theatreId = addTheatreToScreen(screenId);
-				return new Screen(screenId, seatingCap, theatreId);
+				int theatreId = getTheatreByScreen(screenId);
+				List<Integer> shows = showDao.getShowsByScreenId(screenId);
+				return new Screen(screenId, seatingCap, theatreId, shows);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -59,6 +62,26 @@ public class ScreenDaoImpl implements ScreenDao {
 	
 		return null;
 
+	}
+	
+	private int getTheatreByScreen(int screenId) {
+		String sqlQuery = 	"SELECT theatre_id FROM theatre_screen_mapping "
+				+ "WHERE screen_Number = ?";
+		ResultSet rs = null;
+		try {
+			
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			ps.setInt(1, screenId);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int theatreId = rs.getInt("theatre_id");
+				return theatreId;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return 0;
 	}
 
 	@Override
@@ -82,27 +105,6 @@ public class ScreenDaoImpl implements ScreenDao {
 			e.printStackTrace();
 		}
 
-	}
-
-	@Override
-	public int addTheatreToScreen(int screenId) {
-		String sqlQuery = 	"SELECT theatre_id FROM theatre_screen_mapping "
-				+ "WHERE screen_Number = ?";
-		ResultSet rs = null;
-		try {
-			
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1, screenId);
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				int theatreId = rs.getInt("theatre_id");
-				return theatreId;
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		return 0;
 	}
 
 	@Override

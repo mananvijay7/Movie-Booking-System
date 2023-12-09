@@ -1,4 +1,4 @@
-package edu.neu.csye6200.model;
+ package edu.neu.csye6200.model;
 
 public class Movie {
     private int id;
@@ -6,9 +6,7 @@ public class Movie {
     private String description;
     private String genre;
     private int duration; // in minutes
-    
-    
-    
+  
 	public Movie(int id, String title, String description, String genre, int duration) {
 		super();
 		this.id = id;
@@ -59,6 +57,6 @@ public class Movie {
 	}
 	@Override
 	public String toString() {
-		return "id= " + id + ", title= " + title + ", description= " + description;
+		return "id= " + id + ", title= " + title + ", description= " + description + "\n";
 	}   
 }
