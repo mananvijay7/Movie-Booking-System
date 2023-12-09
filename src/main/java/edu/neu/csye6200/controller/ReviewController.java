@@ -1,13 +1,11 @@
 package edu.neu.csye6200.controller;
 
-import java.util.List;
-
-import edu.neu.csye6200.dao.*;
-import edu.neu.csye6200.model.*;
+import edu.neu.csye6200.dao.ReviewDao;
+import edu.neu.csye6200.dao.ReviewDaoImpl;
+import edu.neu.csye6200.model.Review;
 
 public class ReviewController {
 	private ReviewDao reviewDao = new ReviewDaoImpl();
-	private MovieDao movieDao = new MovieDaoImpl();
 	
 	public Review getReviewById(int id) {
     	Review review = reviewDao.getReviewById(id);
