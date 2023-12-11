@@ -65,7 +65,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public void addCustomer(Customer customer) {
 		try {
-			String sqlQuery = "INSERT INTO CUSTOMER (EMAIL, PASSWORD, NAME) VALUES (?,?,?)";
+			String sqlQuery = "INSERT INTO CUSTOMER (email, password, name) VALUES (?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 	        
 			ps.setString(1, customer.getEmail());
@@ -130,5 +130,29 @@ public class CustomerDaoImpl implements CustomerDao {
 		}
 
 	}
+
+    @Override
+    public Customer getCustomerByEmail(String email) {
+        ResultSet rs = null;
+		try {
+			String sqlQuery = "select * from customer where email = ?";
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			ps.setString(1,email);
+
+			rs = ps.executeQuery();
+
+			while(rs.next()) {
+				int customerId = rs.getInt("id");
+				String emailId = rs.getString("email");
+				String password = rs.getString("password");
+				String name = rs.getString("name");		
+				return new Customer(customerId, emailId, password, name);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+
+		return null;
+    }
 
 }

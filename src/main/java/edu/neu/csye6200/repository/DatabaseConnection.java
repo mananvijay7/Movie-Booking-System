@@ -16,7 +16,7 @@ public class DatabaseConnection {
 	
     public static final Connection getDbInstance() {
     	String dbFileName = "properties/ConnectionDetails.txt";
-        String jdbcUrl = "jdbc:mysql://127.0.0.1:3307/ood_finalproject" ;//= "jdbc:mysql://127.0.0.1:3306/ood_finalproject";
+        String jdbcUrl = "jdbc:mysql://127.0.0.1:3307/ood_finalproject1" ;//= "jdbc:mysql://127.0.0.1:3306/ood_finalproject";
         String username = "root";// = "root";
         String password = "root";// = "root";
        

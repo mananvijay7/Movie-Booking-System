@@ -15,8 +15,8 @@ public class MovieController {
         return movies;
     }
 
-    public Movie getMovieById(int id) {
-        Movie movie = movieDao.getMovieById(id);
+    public Movie getMovieByName(String name) {
+        Movie movie = movieDao.getMovieByMovieName(name);
         return movie;
     }
 

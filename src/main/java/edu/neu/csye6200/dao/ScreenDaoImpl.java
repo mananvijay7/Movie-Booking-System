@@ -29,7 +29,7 @@ public class ScreenDaoImpl implements ScreenDao {
 				int screenId = rs.getInt("screen_Number");
 				int seating_capacity = rs.getInt("seating_Capacity");	
 				int theatreId = getTheatreByScreen(screenId);
-				List<Integer> shows = showDao.getShowsByScreenId(screenId);
+				List<Integer> shows = showDao.getAllShowsByScreenId(screenId);
 				allScreens.add(new Screen(screenId, seating_capacity, theatreId, shows));
 			}
 		} catch (SQLException e) {
@@ -53,7 +53,7 @@ public class ScreenDaoImpl implements ScreenDao {
 				int screenId = rs.getInt("screen_Number");
 				int seatingCap = rs.getInt("seating_Capacity");	
 				int theatreId = getTheatreByScreen(screenId);
-				List<Integer> shows = showDao.getShowsByScreenId(screenId);
+				List<Integer> shows = showDao.getAllShowsByScreenId(screenId);
 				return new Screen(screenId, seatingCap, theatreId, shows);
 			}
 		} catch (SQLException e) {

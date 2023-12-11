@@ -3,6 +3,7 @@ package edu.neu.csye6200.controller;
 import java.util.List;
 
 import edu.neu.csye6200.dao.*;
+import edu.neu.csye6200.model.Movie;
 import edu.neu.csye6200.model.Theatre;
 
 public class TheatreController {
@@ -23,8 +24,8 @@ public class TheatreController {
     }
     
     public List<String> getTheatresForMovie(String movieName) {
-    	int movieId = movieDao.getMovieByMovieName(movieName);
-    	List<Integer> screens = showDao.getScreensByMovieId(movieId);
+    	Movie movie = movieDao.getMovieByMovieName(movieName);
+    	List<Integer> screens = showDao.getScreensByMovieId(movie.getId());
     	List<String> theatres = theatreDao.getTheatresByScreen(screens);
     	//Collections.sort(theatres, Comparator.comparing(Theatre::getName));
     	return theatres;

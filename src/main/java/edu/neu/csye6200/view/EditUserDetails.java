@@ -17,9 +17,16 @@ public class EditUserDetails extends javax.swing.JFrame {
     /**
      * Creates new form EditUserDetails
      */
+    private Customer user;
     public EditUserDetails() {
         initComponents();
     }
+    
+    public EditUserDetails(Customer user) {
+        initComponents();
+        this.user = user;
+    }
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -218,8 +225,8 @@ public class EditUserDetails extends javax.swing.JFrame {
             passwordField.setText("");
             confirmPasswordField.setText("");
         } else {
-            Customer newUser = new Customer(email, pass, fullname);
-            customerObj.addCustomer(newUser);
+            Customer updateUser = new Customer(this.user.getId(), email, pass, fullname);
+            customerObj.updateCustomer(updateUser);
             JOptionPane.showMessageDialog(EditUserDetails.this, "Success !!! Account Updated");
             LoginFrame login = new LoginFrame();
             login.setVisible(true);
@@ -229,6 +236,9 @@ public class EditUserDetails extends javax.swing.JFrame {
 
     private void signUpBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBtn1ActionPerformed
         // TODO add your handling code here:
+        MyAccountFrame acc = new MyAccountFrame(this.user);
+        acc.setVisible(true);
+        this.setVisible(false);
     }//GEN-LAST:event_signUpBtn1ActionPerformed
 
     /**

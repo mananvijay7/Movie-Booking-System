@@ -4,8 +4,10 @@
  */
 package edu.neu.csye6200.view;
 
+import edu.neu.csye6200.controller.ReviewController;
 import edu.neu.csye6200.controller.TheatreController;
 import edu.neu.csye6200.model.Movie;
+import edu.neu.csye6200.model.Review;
 import edu.neu.csye6200.model.Theatre;
 import java.awt.image.BufferedImage;
 import java.io.File;
@@ -30,19 +32,21 @@ public class MovieDetailScreen extends javax.swing.JFrame {
     public MovieDetailScreen() {
         initComponents();
         setDetailsOnScreen();
+        leftSidePanel();
     }
     
     public void setDetailsOnScreen() {
-                //Getting list of Theatre
+        //Getting list of Theatre
         TheatreController theatreList = new TheatreController();
-        List<Theatre> theatres = theatreList.getAllTheatres();
+        List<String> theatres = theatreList.getTheatresForMovie(this.movie.getTitle());
         String[] listOfTheatres = new String[theatres.size()];
       
         for(int i = 0; i < listOfTheatres.length; i++) {
-            listOfTheatres[i] = theatres.get(i).getName();
+            listOfTheatres[i] = theatres.get(i);
+            System.out.print("Arr: " + listOfTheatres[i]);
         }
         theatreDropdown.setModel(new DefaultComboBoxModel<>(listOfTheatres));
-        theatreDropdown.setSelectedIndex(0);
+        //theatreDropdown.setSelectedIndex(0);
         movieDetailsPanel.add(theatreDropdown); // Add theatreDropdown to the movieDetailsPanel
         
         
@@ -54,17 +58,13 @@ public class MovieDetailScreen extends javax.swing.JFrame {
     }
     
     public void leftSidePanel(){
-        String moviePosterPath = "/properties/images/" + this.movie.getTitle()+"_big.jpg";
-        System.out.println(moviePosterPath);
-        //moviePosterLabel.setIcon(new javax.swing.ImageIcon(moviePosterPath)); // 
-        moviePosterLabel.setPreferredSize(new java.awt.Dimension(226, 260));
-        add(moviePosterLabel);
-        jPanel2.add(moviePosterLabel);
-        
+
         movieName.setText(this.movie.getTitle());
-        int duration = this.movie.getDuration();
-        movieDuration.setText(Integer.toString(duration));
+        movieDuration.setText(Integer.toString(this.movie.getDuration()) + "min");
         movieGenre.setText(this.movie.getGenre());
+        ReviewController revCon = new ReviewController();
+        Review rev = revCon.getReviewById(this.movie.getId());
+        movieReview.setText(rev.getComment());
         pack();
         
     }
@@ -87,12 +87,15 @@ public class MovieDetailScreen extends javax.swing.JFrame {
 
         movieDetailsPanel = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
-        jPanel3 = new javax.swing.JPanel();
-        moviePosterLabel = new javax.swing.JLabel();
         movieName = new javax.swing.JLabel();
         movieGenre = new javax.swing.JLabel();
         movieReview = new javax.swing.JLabel();
         movieDuration = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
         showTimeDropdown = new javax.swing.JComboBox<>();
         jLabel1 = new javax.swing.JLabel();
         theatreDropdown = new javax.swing.JComboBox<>();
@@ -106,78 +109,100 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         movieDetailsPanel.setBackground(new java.awt.Color(255, 255, 255));
 
         jPanel2.setBackground(new java.awt.Color(7, 59, 76));
+        jPanel2.setPreferredSize(new java.awt.Dimension(488, 400));
 
-        jPanel3.setPreferredSize(new java.awt.Dimension(220, 300));
-
-        moviePosterLabel.setText("jLabel4");
-        moviePosterLabel.setPreferredSize(new java.awt.Dimension(230, 300));
-
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(moviePosterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addComponent(moviePosterLabel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 13, Short.MAX_VALUE))
-        );
-
-        movieName.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
-        movieName.setForeground(new java.awt.Color(255, 255, 255));
+        movieName.setFont(new java.awt.Font("Roboto", 1, 36)); // NOI18N
+        movieName.setForeground(new java.awt.Color(255, 255, 102));
         movieName.setText("Default Movie Name");
 
         movieGenre.setBackground(new java.awt.Color(51, 51, 51));
-        movieGenre.setFont(new java.awt.Font("Roboto", 2, 18)); // NOI18N
+        movieGenre.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         movieGenre.setForeground(new java.awt.Color(204, 204, 204));
         movieGenre.setText("Drama");
 
         movieReview.setBackground(new java.awt.Color(51, 51, 51));
-        movieReview.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        movieReview.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         movieReview.setForeground(new java.awt.Color(204, 204, 204));
         movieReview.setText("4.5 out of 5");
 
         movieDuration.setBackground(new java.awt.Color(51, 51, 51));
-        movieDuration.setFont(new java.awt.Font("Roboto", 2, 18)); // NOI18N
+        movieDuration.setFont(new java.awt.Font("Roboto", 0, 18)); // NOI18N
         movieDuration.setForeground(new java.awt.Color(204, 204, 204));
         movieDuration.setText("150 mins");
+
+        jLabel4.setFont(new java.awt.Font("Roboto", 1, 24)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel4.setText("Movie Details");
+
+        jLabel6.setIcon(new javax.swing.ImageIcon("F:\\Classwork\\CSYE-6200 OOD\\Project\\AllNew\\final-project-final-group-14\\src\\images\\book-image-01.png")); // NOI18N
+        jLabel6.setPreferredSize(new java.awt.Dimension(180, 180));
+
+        jLabel5.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel5.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel5.setText("Duration: ");
+
+        jLabel7.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel7.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel7.setText("Genre: ");
+
+        jLabel8.setFont(new java.awt.Font("Roboto", 1, 18)); // NOI18N
+        jLabel8.setForeground(new java.awt.Color(204, 204, 204));
+        jLabel8.setText("Ratings: ");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(61, 61, 61)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(movieReview, javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(movieName))
-                    .addComponent(movieDuration)
-                    .addComponent(movieGenre))
-                .addContainerGap(102, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 230, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(104, 104, 104)
+                        .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(113, 113, 113)
+                        .addComponent(jLabel4))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(79, 79, 79)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(movieName)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGap(6, 6, 6)
+                                .addComponent(jLabel7)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(movieGenre))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(85, 85, 85)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel8))
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(movieDuration)
+                            .addComponent(movieReview))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(53, 53, 53)
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addGap(40, 40, 40)
+                .addComponent(jLabel4)
+                .addGap(56, 56, 56)
                 .addComponent(movieName)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(movieReview)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(movieDuration)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(movieGenre)
-                .addContainerGap(85, Short.MAX_VALUE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(movieGenre)
+                    .addComponent(jLabel7))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel5)
+                    .addComponent(movieDuration))
+                .addGap(18, 18, 18)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel8)
+                    .addComponent(movieReview))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(79, 79, 79))
         );
 
         showTimeDropdown.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
@@ -203,7 +228,7 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         jLabel3.setText("Select Seats");
 
-        jButton1.setBackground(new java.awt.Color(51, 51, 51));
+        jButton1.setBackground(new java.awt.Color(7, 59, 76));
         jButton1.setForeground(new java.awt.Color(255, 255, 255));
         jButton1.setText("Book Tickets");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -217,8 +242,8 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         movieDetailsPanelLayout.setHorizontalGroup(
             movieDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(movieDetailsPanelLayout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(101, 101, 101)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 400, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(68, 68, 68)
                 .addGroup(movieDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(showTimeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addGroup(movieDetailsPanelLayout.createSequentialGroup()
@@ -229,13 +254,13 @@ public class MovieDetailScreen extends javax.swing.JFrame {
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(theatreDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(129, Short.MAX_VALUE))
+                .addContainerGap(143, Short.MAX_VALUE))
         );
         movieDetailsPanelLayout.setVerticalGroup(
             movieDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 683, Short.MAX_VALUE)
             .addGroup(movieDetailsPanelLayout.createSequentialGroup()
-                .addGap(78, 78, 78)
+                .addGap(90, 90, 90)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(theatreDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -319,14 +344,17 @@ public class MovieDetailScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
     private javax.swing.JSpinner jSpinner1;
     private javax.swing.JPanel movieDetailsPanel;
     private javax.swing.JLabel movieDuration;
     private javax.swing.JLabel movieGenre;
     private javax.swing.JLabel movieName;
-    private javax.swing.JLabel moviePosterLabel;
     private javax.swing.JLabel movieReview;
     private javax.swing.JComboBox<String> showTimeDropdown;
     private javax.swing.JComboBox<String> theatreDropdown;
