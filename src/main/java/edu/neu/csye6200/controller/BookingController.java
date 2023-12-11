@@ -5,11 +5,13 @@ import edu.neu.csye6200.dao.BookingDao;
 import edu.neu.csye6200.dao.BookingDaoImpl;
 import edu.neu.csye6200.dao.SeatDao;
 import edu.neu.csye6200.dao.SeatDaoImpl;
+import edu.neu.csye6200.dao.SeatDao.SeatAvailabilityDao;
+import edu.neu.csye6200.dao.SeatDaoImpl.SeatAvailabilityDaoImpl;
 import edu.neu.csye6200.model.Booking;
 
 public class BookingController {
 	private BookingDao bookingDao = new BookingDaoImpl();
-	private SeatDao seatDao = new SeatDaoImpl();
+	private SeatAvailabilityDao seatAvailabilityDao = new SeatAvailabilityDaoImpl();
 	
 	public List<Booking> getAllCustomerBookings(int id) {
 		List<Booking> booking = bookingDao.getAllBookingsByCustomerId(id);
@@ -22,7 +24,7 @@ public class BookingController {
 	
     public void addBooking(Booking booking) {
     	bookingDao.addBooking(booking);
-    	seatDao.updateSeatAvailability(booking.getBookedSeats(), booking.getShowId());
+    	seatAvailabilityDao.updateSeatAvailability(booking.getBookedSeats(), booking.getShowId());
     }
     
     public void updateBooking(Booking booking) {
