@@ -6,9 +6,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+
 import edu.neu.csye6200.model.Theatre;
 import edu.neu.csye6200.repository.DatabaseConnection;
+import java.util.Collections;
 
 public class TheatreDaoImpl implements TheatreDao {
 	Connection connection = DatabaseConnection.getDbInstance();
@@ -74,6 +78,9 @@ public class TheatreDaoImpl implements TheatreDao {
 		} catch (SQLException exp) {
 			exp.printStackTrace();
 		}
+		Set<String> theatreName = new HashSet<>(theatres);
+                theatres = new ArrayList<>(theatreName);
+                Collections.sort(theatres);
 		return theatres;
 	}
 
