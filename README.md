@@ -46,6 +46,3 @@ Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File Handling, Inner 
 ##### - Anoushka Bansal:
 ##### - Tejas:
 
-### License
-Information about the project's licensing terms.
-
