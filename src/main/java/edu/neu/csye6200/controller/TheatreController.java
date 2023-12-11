@@ -1,29 +1,32 @@
 package edu.neu.csye6200.controller;
 
 import java.util.List;
+
 import edu.neu.csye6200.dao.*;
 import edu.neu.csye6200.model.Theatre;
 
 public class TheatreController {
 	private TheatreDao theatreDao = new TheatreDaoImpl();
+	private MovieDao movieDao = new MovieDaoImpl();
+	private ShowDao showDao = new ShowDaoImpl();
 	
-	public List<Theatre> getAllTheatres(){
-		return theatreDao.getAllTheatres();
+	public int getTheatreByName(String theatreName) {
+		return theatreDao.getTheatreByName(theatreName);
 	}
-	
-    public Theatre getTheatreById(int id) {
-        return theatreDao.getTheatreById(id);
-    }
     
     public void addTheatre(Theatre theatre) {
     	theatreDao.addTheatre(theatre);
     }
     
-    public void updateTheatre(Theatre theatre) {
-    	theatreDao.updateTheatre(theatre);
-    }
-    
     public void deleteTheatre(int id) {
     	theatreDao.deleteTheatre(id);
+    }
+    
+    public List<String> getTheatresForMovie(String movieName) {
+    	int movieId = movieDao.getMovieByMovieName(movieName);
+    	List<Integer> screens = showDao.getScreensByMovieId(movieId);
+    	List<String> theatres = theatreDao.getTheatresByScreen(screens);
+    	//Collections.sort(theatres, Comparator.comparing(Theatre::getName));
+    	return theatres;
     }
 }

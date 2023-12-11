@@ -1,12 +1,15 @@
 package edu.neu.csye6200.controller;
 
 import java.util.List;
+import java.util.Map;
+
 import edu.neu.csye6200.dao.ShowDao;
 import edu.neu.csye6200.dao.ShowDaoImpl;
 import edu.neu.csye6200.model.Show;
 
 public class ShowController {
 	ShowDao showDao = new ShowDaoImpl();
+	ScreenController screenController = new ScreenController();
 	public List<Show> getShowsOfMovie(int movieId){
 		return showDao.getAllShowsByMovieId(movieId);
 	}
@@ -15,16 +18,12 @@ public class ShowController {
         return showDao.getShowById(id);
     }
     
-    public List<Integer> getShowsOnScreen(int screenId) {
-    	return showDao.getShowsByScreenId(screenId);
+    public Map<Integer, String> getShowsOnScreen(String theatreName, int movieId) {
+    	return showDao.getShowsByScreens(screenController.getScreenOfTheatres(theatreName), movieId);
     }
     
     public void addShow(Show show) {
     	showDao.addShow(show);
-    }
-    
-    public void updateShow(Show show) {
-    	showDao.updateShow(show);
     }
     
     public void deleteShow(int id) {

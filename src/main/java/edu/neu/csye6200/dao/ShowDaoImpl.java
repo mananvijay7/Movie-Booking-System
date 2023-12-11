@@ -8,7 +8,10 @@ import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import edu.neu.csye6200.model.Show;
 import edu.neu.csye6200.repository.DatabaseConnection;
 
@@ -31,6 +34,26 @@ public class ShowDaoImpl implements ShowDao {
 				int movie_id = rs.getInt("movie_Id");
 				int screenid = rs.getInt("screen_Number");		
 				allShows.add(new Show(showId, showTime, movie_id, screenid));
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+		return allShows;
+	}
+    
+	@Override
+	public List<Integer> getAllShowsByScreenId(int screenId) {
+		List<Integer> allShows = new ArrayList<Integer>();
+		ResultSet rs = null;
+		try {
+			String sqlQuery = "select show_Id from movie_show where screen_Number = ?";
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			ps.setInt(1, screenId);
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {	
+				allShows.add(rs.getInt("show_Id"));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -64,25 +87,28 @@ public class ShowDaoImpl implements ShowDao {
 	}
 
 	@Override
-	public List<Integer> getShowsByScreenId(int screenId){
-		List<Integer> shows = new ArrayList<Integer>();
+	public Map<Integer, String> getShowsByScreens(List<Integer> screens, int movieId){
+		Map<Integer, String> shows = new HashMap<Integer, String>();
 		ResultSet rs = null;
 		try {
-			String sqlQuery = "select show_Id from movie_show where screen_Number = ?";
+			
+			String sqlQuery = "SELECT DISTINCT show_Id, showTime FROM movie_show WHERE screen_Number = ? and movie_Id = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1,screenId);
-			
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				int showId = rs.getInt("show_Id");
-				shows.add(showId);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+			ps.setInt(2, movieId);
+			for (int screenId: screens) {
+				ps.setInt(1, screenId);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					int showId = rs.getInt("show_Id");
+					String showTime = rs.getString("showTime");
+					shows.put(showId, showTime);
+				}
+			}	
+		} catch (SQLException exp) {
+			exp.printStackTrace();
 		}
-	
 		return shows;
+
 
 	}
 	
@@ -115,12 +141,6 @@ public class ShowDaoImpl implements ShowDao {
 	}
 
 	@Override
-	public void updateShow(Show show) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
 	public void deleteShow(int id) {
 		try {
 			String sqlQuery = "DELETE FROM movie_show WHERE show_Id = ?";
@@ -139,6 +159,28 @@ public class ShowDaoImpl implements ShowDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public List<Integer> getScreensByMovieId(int movieId) {
+		List<Integer> screens = new ArrayList<Integer>();
+		ResultSet rs = null;
+		try {
+			String sqlQuery = "select distinct screen_Number from movie_show where movie_Id = ?";
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			ps.setInt(1,movieId);
+			
+			rs = ps.executeQuery();
+			
+			while(rs.next()) {
+				int showId = rs.getInt("screen_Number");
+				screens.add(showId);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	
+		return screens;
 	}
 
 }

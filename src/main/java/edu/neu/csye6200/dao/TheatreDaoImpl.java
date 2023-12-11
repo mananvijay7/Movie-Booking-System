@@ -14,28 +14,27 @@ public class TheatreDaoImpl implements TheatreDao {
 	Connection connection = DatabaseConnection.getDbInstance();
 	
 	@Override
-	public List<Theatre> getAllTheatres() {
-		List<Theatre> theatres = new ArrayList<Theatre>();
-		Statement statement;
+	public int getTheatreByName(String theatreName) {
 		ResultSet rs = null;
 		try {
-			statement = connection.createStatement();
-			String sqlQuery = "select * from theatre";
-			rs = statement.executeQuery(sqlQuery);
+			String sqlQuery = "select theatre_id from theatre where theatre_name = ?";
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			ps.setString(1,theatreName);
+			
+			rs = ps.executeQuery();
+			
 			while(rs.next()) {
-				int theatre_id = rs.getInt("theatre_Id");
-				String theatre_name= rs.getString("theatre_name");
-				List<Integer> screens = getScreensOfTheatre(theatre_id);
-				theatres.add(new Theatre(theatre_id, theatre_name, screens));
+				int movieId = rs.getInt("theatre_id");
+				return movieId;
 			}
-
-		} catch (SQLException exp) {
-			System.out.println(exp);
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
-		return theatres;
+	
+		return 0;
 	}
 	
-	private List<Integer> getScreensOfTheatre(int theatre_id) {
+	public List<Integer> getScreensOfTheatre(int theatre_id) {
 		List<Integer> screens = new ArrayList<Integer>();
 		ResultSet rs = null;
 		try {
@@ -54,9 +53,32 @@ public class TheatreDaoImpl implements TheatreDao {
 		}
 		return screens;
 	}
-
+	
 	@Override
-	public Theatre getTheatreById(int id) {
+	public List<String> getTheatresByScreen(List<Integer> screens) {
+		List<String> theatres = new ArrayList<String>();
+		ResultSet rs = null;
+		try {
+			
+			String sqlQuery = "SELECT DISTINCT theatre_id FROM theatre_screen_mapping WHERE screen_Number = ?";
+			PreparedStatement ps = connection.prepareStatement(sqlQuery);
+			
+			for (int screenId: screens) {
+				ps.setInt(1, screenId);
+				rs = ps.executeQuery();
+				while (rs.next()) {
+					int theatreId = rs.getInt("theatre_id");
+					theatres.add(getTheatreById(theatreId).getName());
+				}
+			}	
+		} catch (SQLException exp) {
+			exp.printStackTrace();
+		}
+		return theatres;
+	}
+
+
+	private Theatre getTheatreById(int id) {
 		ResultSet rs = null;
 		
 		try {
@@ -122,12 +144,6 @@ public class TheatreDaoImpl implements TheatreDao {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
-	}
-
-	@Override
-	public void updateTheatre(Theatre theatre) {
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

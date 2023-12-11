@@ -88,12 +88,6 @@ public class SeatDaoImpl implements SeatDao {
 		}
 		return 0;
 	}
-	
-	@Override
-	public void updateSeat(Seat seat) {
-		// TODO Auto-generated method stub
-
-	}
 
 	@Override
 	public void deleteSeat(int seatNumber, String seatRow) {

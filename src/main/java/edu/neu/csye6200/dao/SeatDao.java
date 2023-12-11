@@ -12,8 +12,6 @@ public interface SeatDao {
     
     int addSeat(Seat seat);
     
-    void updateSeat(Seat seat);
-    
     void deleteSeat(int seatNumber, String seatRow);
         
     public interface SeatAvailabilityDao {

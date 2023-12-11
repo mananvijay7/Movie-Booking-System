@@ -5,13 +5,14 @@ import java.util.List;
 import edu.neu.csye6200.model.Theatre;
 
 public interface TheatreDao {
-    List<Theatre> getAllTheatres();
 
-    Theatre getTheatreById(int id);
+    int getTheatreByName(String theatreName);
+    
+    List<String> getTheatresByScreen(List<Integer> screens);
+    
+    List<Integer> getScreensOfTheatre(int theatre_id);
 
     void addTheatre(Theatre theatre);
-    
-    void updateTheatre(Theatre theatre);
     
     void deleteTheatre(int id);
 }

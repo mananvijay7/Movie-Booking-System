@@ -10,11 +10,10 @@ public class Booking {
     private List<Integer> bookedSeats;
     private int customerId;
     	
-	public Booking(int showId, Date bookingDate, List<Integer> bookedSeats, int customerId) {
+	public Booking(int showId, Date bookingDate, int customerId) {
 		super();
 		this.showId = showId;
 		this.bookingDate = bookingDate;
-		this.bookedSeats = bookedSeats;
 		this.customerId = customerId;
 	}
 	public Booking(int id, int showId, Date bookingDate, List<Integer> bookedSeats, int customerId) {
