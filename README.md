@@ -32,15 +32,15 @@ Administers screens, seats, and showtimes within a theater.
 ### Usage
 #### Installation:
 Details about how to set up and run the application.
-#### Dependencies: 
-Java Swing, JDBC, NetBeans, MySQL.
+#### Software Dependencies: 
+Eclipse, NetBeans, MySQL.
 #### Configuration:
 Instructions for configuring the application and database connections.
 
 ### Implementations Used:
-Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File Handling, Inner classes, Exception Handling, MVC design pattern, Singleton design pattern, Comparators, Java Database Connectivity
+Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File IO, Inner classes, Exception Handling, MVC design pattern,SOLID design pattern, Singleton design pattern, Comparators, Java Database Connectivity, Java Swing
 
-### Learnings :
+### Learnings:
 1) Acquired proficiency in implementing Model-View-Controller (MVC) design patterns using Java objects, demonstrating a strong understanding of software architecture principles.
 2) Mastered advanced techniques in Java Swing for creating sophisticated and responsive user interfaces, showcasing a high level of expertise in graphical user interface (GUI) development.
 3) Developed competence in Java Database Connectivity (JDBC) for seamless integration with databases, demonstrating the ability to persist and retrieve data effectively.
