@@ -3,26 +3,31 @@
 > Northeastern University, College of Engineering
 
 
-## Professor: Daniel Peters
+Project README: Movie Booking and Review System
 
-### Requirements
-1. Eclipse or VS Code or IntelliJ.
+Overview
+This project is a Java-based web application designed for managing movie bookings, customer reviews, and other related functionalities in a movie theater context.
 
-Note: If you are using Eclipse, please have git CLI installed on your system or GitHub Desktop to commit the code in this repository
+Structure
+Controller Classes: Handle HTTP requests and responses. Includes BookingController, MovieController, ReviewController, ScreenController, SeatController, ShowController, TheatreController.
+Model Classes: Represent data structures. Includes Booking, Customer, Movie, Review, Screen, Seat, Show, Theatre.
+DAO (Data Access Object) Classes: Facilitate CRUD operations for database interaction. Includes BookingDao, CustomerDao, MovieDao, ReviewDao, ScreenDao, SeatDao, ShowDao, TheatreDao.
+DAO Implementation Classes: Provide concrete implementations of DAO interfaces. Includes BookingDaoImpl, CustomerDaoImpl, MovieDaoImpl, ReviewDaoImpl, ScreenDaoImpl, SeatDaoImpl, ShowDaoImpl, TheatreDaoImpl.
 
-### SetUp Instructions
-1. Please clone the repository on your local system
-2. For Eclipse Import the project as Existing Maven Project, For IntelliJ you can directlty open it using 'Get from VCS'.
-4. All code should be pushed to the main branch
-3. Ensure the GitHub actions are successful post push
+Features
+Booking Management: Facilitates booking seats for movie shows.
+Movie Information: Manages movie details, including schedules, genres, and ratings.
+Customer Reviews: Allows customers to review and rate movies.
+Theater Layout Management: Administers screens, seats, and showtimes within a theater.
 
-Submissions will have deadlines, failed GitHub Actions would result in point deductions.
+Usage
+Installation: Details about how to set up and run the application.
+Dependencies: List of external libraries and frameworks required.
+Configuration: Instructions for configuring the application and database connections.
 
-### References
-1. Cloning a Repository: <https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository>
-2. Any GitHub Setup: Please refer to the Git & GitHub Fundamentals Repository shared to you by your respective TA and refer the README.md section
+Contribution
+Guidelines for contributing to the project, including code style, issue reporting, and pull requests.
 
-Please reach out to your respective TA if you need any help in regards with submission/ GitHub
+License
+Information about the project's licensing terms.
 
-Author:
-- Ruchika Sharma (sharma.ruc@northeastern.edu)
