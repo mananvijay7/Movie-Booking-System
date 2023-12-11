@@ -32,25 +32,25 @@ public class Movie {
 		this.id = id;
 	}
 	public String getGenre() {
-		return this.genre;
+		return genre;
 	}
 	public void setGenre(String genre) {
 		this.genre = genre;
 	}
 	public int getDuration() {
-		return this.duration;
+		return duration;
 	}
 	public void setDuration(int duration) {
 		this.duration = duration;
 	}
 	public String getTitle() {
-		return this.title;
+		return title;
 	}
 	public void setTitle(String title) {
 		this.title = title;
 	}
 	public String getDescription() {
-		return this.description;
+		return description;
 	}
 	public void setDescription(String description) {
 		this.description = description;
