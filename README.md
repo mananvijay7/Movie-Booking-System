@@ -38,11 +38,18 @@ Instructions for configuring the application and database connections.
 ### Implementations Used:
 Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File Handling, Inner classes, Exception Handling, MVC, Signleton, Comparators
 
+### Learnings :
+1) Acquired proficiency in implementing Model-View-Controller (MVC) design patterns using Java objects, demonstrating a strong understanding of software architecture principles.
+2) Mastered advanced techniques in Java Swing for creating sophisticated and responsive user interfaces, showcasing a high level of expertise in graphical user interface (GUI) development.
+3) Developed competence in Java Database Connectivity (JDBC) for seamless integration with databases, demonstrating the ability to persist and retrieve data effectively.
+4) Gained expertise in managing both front-end and back-end data, showcasing comprehensive knowledge in handling the entire data lifecycle within a Java-based application architecture.
+
 ### Contribution
-##### - Ujjwal Shrivastava:
+##### - Ujjawal Shrivastava:
 ##### - Ishita Gupta:
 ##### - Yashvardhan Limbodiya:
 ##### - Manan Vijayvargia:
 ##### - Anoushka Bansal:
-##### - Tejas:
+##### - Tejas Vasisht
+##### - Kevin Rodrigues
 
