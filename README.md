@@ -9,6 +9,8 @@ Project README: Movie Booking and Review System
 This project is a Java-based web application designed for managing movie bookings, customer reviews, and other related functionalities in a movie theater context.
 
 ### Structure
+#### View Classes:
+
 #### Controller Classes: 
 Handle HTTP requests and responses. Includes BookingController, MovieController, ReviewController, ScreenController, SeatController, ShowController, TheatreController.
 #### Model Classes: 
@@ -36,7 +38,7 @@ Java Swing, JDBC, NetBeans, MySQL.
 Instructions for configuring the application and database connections.
 
 ### Implementations Used:
-Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File Handling, Inner classes, Exception Handling, MVC, Signleton, Comparators
+Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File Handling, Inner classes, Exception Handling, MVC design pattern, Singleton design pattern, Comparators, Java Database Connectivity
 
 ### Learnings :
 1) Acquired proficiency in implementing Model-View-Controller (MVC) design patterns using Java objects, demonstrating a strong understanding of software architecture principles.
@@ -45,11 +47,11 @@ Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File Handling, Inner 
 4) Gained expertise in managing both front-end and back-end data, showcasing comprehensive knowledge in handling the entire data lifecycle within a Java-based application architecture.
 
 ### Contribution
-##### - Ujjawal Shrivastava:
-##### - Ishita Gupta:
-##### - Yashvardhan Limbodiya:
-##### - Manan Vijayvargia:
-##### - Anoushka Bansal:
-##### - Tejas Vasisht
-##### - Kevin Rodrigues
+##### - Ujjawal Shrivastava: DAO Layer, JDBC Connection and Git management
+##### - Ishita Gupta: Database schema and Models
+##### - Yashvardhan Limbodiya: View classes and Controller Layer
+##### - Manan Vijayvargia: Implemented Java concepts
+##### - Anoushka Bansal: Controller classes
+##### - Tejas Vasisht: View Classes
+##### - Kevin Rodrigues: View classes
 
