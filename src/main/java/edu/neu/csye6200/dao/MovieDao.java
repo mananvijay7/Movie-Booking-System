@@ -14,6 +14,4 @@ public interface MovieDao {
     void updateMovie(Movie movie);
     
     void deleteMovie(int id);
-
-    public Movie getMovieByName(String movieName);
 }

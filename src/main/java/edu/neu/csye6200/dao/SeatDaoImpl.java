@@ -13,7 +13,7 @@ import edu.neu.csye6200.model.Seat;
 import edu.neu.csye6200.repository.DatabaseConnection;
 
 public class SeatDaoImpl implements SeatDao {
-	Connection connection = DatabaseConnection.getDbInstance();
+	static Connection connection = DatabaseConnection.getDbInstance();
 	@Override
 	public List<Seat> getAllSeats() {
 		List<Seat> allSeats = new ArrayList<Seat>();
@@ -65,32 +65,6 @@ public class SeatDaoImpl implements SeatDao {
 		return response;
 
 
-	}
-
-	@Override
-	public Map<Seat, Boolean> getSeatAvailabilityByScreen(int screenId) {
-		Map<Seat, Boolean> response = new HashMap<Seat, Boolean>();
-		ResultSet rs = null;
-		try {
-			String sqlQuery = "select * from seat where screen_Number = ?";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1,screenId);
-			
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				int seatId = rs.getInt("seat_Id");
-				int seatNumber = rs.getInt("seat_Number");
-				String seatRow = rs.getString("seat_Row");
-				String seatClass = rs.getString("seat_Class");
-				int screen_Id = rs.getInt("screen_Number");		
-				response.put(new Seat(seatId, seatNumber, seatRow, seatClass, screen_Id), true);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	
-		return response;
 	}
 	
 	@Override
@@ -144,107 +118,118 @@ public class SeatDaoImpl implements SeatDao {
 
 	}
 	
-	@Override
-	public List<Integer> getSeatAvailabilityByShow(int showId) {
-		List<Integer> seats = new ArrayList<Integer>();
-		ResultSet rs = null;
-		try {
-			String sqlQuery = "select seat_Id from seat_availability where show_Id = ? and availability = true";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1,showId);
-			rs = ps.executeQuery();			
-			while(rs.next()) {
-				seats.add(rs.getInt("seat_Id"));
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	
-		return seats;
-	}
-	
-	@Override
-	public void addSeatAvailability(int seatId, List<Integer> shows) {
-		try {
-			String sqlQuery = "INSERT INTO seat_availability (seat_Id, availability, show_Id) VALUES (?,true,?)";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1, seatId);
-			
-			for(int showId: shows) {
-				ps.setInt(2, showId);
-				ps.executeUpdate();
-			}	
-			
-			System.out.println("Seat Availability Added Successfully = " + "\n");
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+	public static class SeatAvailabilityDaoImpl implements SeatAvailabilityDao {
 
-	}
-	
-	@Override
-	public void updateSeatAvailability(List<Integer> seats, int showId) {
-		try {
-			String sqlQuery = "UPDATE seat_availability " + 
-		                      " SET availability = false" + 
-					          " WHERE show_Id = ? and seat_Id = ?";
-
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1, showId);
-			
-			for(int seatId : seats) {
-				ps.setInt(2, seatId);
-				ps.executeUpdate();
-			}
-			System.out.println("Seat Availability Updated");
-			
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	}
-
-	
-	@Override
-	public int getAvailableSeatCount(int showId) {
-		ResultSet rs = null;
-		try {
-			String sqlQuery = "select count(*) from seat_availability where show_Id = ? and availability = true";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1,showId);
-			rs = ps.executeQuery();			
-			while(rs.next()) {
+		@Override
+		public Map<Seat, Boolean> getSeatAvailabilityByScreen(int screenId) {
+			Map<Seat, Boolean> response = new HashMap<Seat, Boolean>();
+			ResultSet rs = null;
+			try {
+				String sqlQuery = "select * from seat where screen_Number = ?";
+				PreparedStatement ps = connection.prepareStatement(sqlQuery);
+				ps.setInt(1,screenId);
 				
-				int seatId = rs.getInt(1);
-				return seatId;
+				rs = ps.executeQuery();
+				
+				while(rs.next()) {
+					int seatId = rs.getInt("seat_Id");
+					int seatNumber = rs.getInt("seat_Number");
+					String seatRow = rs.getString("seat_Row");
+					String seatClass = rs.getString("seat_Class");
+					int screen_Id = rs.getInt("screen_Number");		
+					response.put(new Seat(seatId, seatNumber, seatRow, seatClass, screen_Id), true);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+		
+			return response;
 		}
-	
-		return 0;
 
-	}
-	
-	@Override
-	public List<Integer> getAvailableSeatsByShow(int showId) {
-		List<Integer> response = new ArrayList<Integer>();
-		ResultSet rs = null;
-		try {
-			String sqlQuery = "select seat_Id from seat_availability where show_Id = ? and availability = true";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1, showId);
-			
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				int seatId = rs.getInt("seat_Id");	
-				response.add(seatId);
+
+		@Override
+		public void addSeatAvailability(int seatId, List<Integer> shows) {
+			try {
+				String sqlQuery = "INSERT INTO seat_availability (seat_Id, availability, show_Id) VALUES (?,true,?)";
+				PreparedStatement ps = connection.prepareStatement(sqlQuery);
+				ps.setInt(1, seatId);
+				
+				for(int showId: shows) {
+					ps.setInt(2, showId);
+					ps.executeUpdate();
+				}	
+				
+				System.out.println("Seat Availability Added Successfully = " + "\n");
+			} catch (SQLException e) {
+				e.printStackTrace();
 			}
-		} catch (SQLException e) {
-			e.printStackTrace();
+
 		}
-	
-		return response;
+
+		@Override
+		public List<Integer> getAvailableSeatsByShow(int showId) {
+			List<Integer> response = new ArrayList<Integer>();
+			ResultSet rs = null;
+			try {
+				String sqlQuery = "select seat_Id from seat_availability where show_Id = ? and availability = true";
+				PreparedStatement ps = connection.prepareStatement(sqlQuery);
+				ps.setInt(1, showId);
+				
+				rs = ps.executeQuery();
+				
+				while(rs.next()) {
+					int seatId = rs.getInt("seat_Id");	
+					response.add(seatId);
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+			return response;
+		}
+
+		@Override
+		public int getAvailableSeatCount(int showId) {
+			ResultSet rs = null;
+			try {
+				String sqlQuery = "select count(*) from seat_availability where show_Id = ? and availability = true";
+				PreparedStatement ps = connection.prepareStatement(sqlQuery);
+				ps.setInt(1,showId);
+				rs = ps.executeQuery();			
+				while(rs.next()) {
+					
+					int seatId = rs.getInt(1);
+					return seatId;
+				}
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		
+			return 0;
+
+		}
+
+		@Override
+		public void updateSeatAvailability(List<Integer> seats, int showId) {
+			try {
+				String sqlQuery = "UPDATE seat_availability " + 
+			                      " SET availability = false" + 
+						          " WHERE show_Id = ? and seat_Id = ?";
+
+				PreparedStatement ps = connection.prepareStatement(sqlQuery);
+				ps.setInt(1, showId);
+				
+				for(int seatId : seats) {
+					ps.setInt(2, seatId);
+					ps.executeUpdate();
+				}
+				System.out.println("Seat Availability Updated");
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		
 	}
 
 }

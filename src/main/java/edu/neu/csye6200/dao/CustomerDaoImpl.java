@@ -65,7 +65,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public void addCustomer(Customer customer) {
 		try {
-			String sqlQuery = "INSERT INTO CUSTOMER (customer_email, customer_password, customer_name) VALUES (?,?,?)";
+			String sqlQuery = "INSERT INTO CUSTOMER (EMAIL, PASSWORD, NAME) VALUES (?,?,?)";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 	        
 			ps.setString(1, customer.getEmail());
@@ -89,8 +89,8 @@ public class CustomerDaoImpl implements CustomerDao {
 	public void updateCustomer(Customer customer) {
 		try {
 			String sqlQuery = "UPDATE customer " + 
-		            "SET customer_email= ?, customer_password = ?, customer_name = ?"
-					+ " WHERE customer_id = ?";
+		            "SET email= ?, password = ?, name = ?"
+					+ " WHERE id = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setString(1,customer.getEmail());
 			ps.setString(2,customer.getPassword());
@@ -112,7 +112,7 @@ public class CustomerDaoImpl implements CustomerDao {
 	@Override
 	public void deletecustomer(int id) {
 		try {
-			String sqlQuery = "DELETE FROM CUSTOMER WHERE customer_email = ?";
+			String sqlQuery = "DELETE FROM CUSTOMER WHERE ID = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setInt(1,id);
 			
@@ -130,29 +130,5 @@ public class CustomerDaoImpl implements CustomerDao {
 		}
 
 	}
-
-    @Override
-    public Customer getCustomerByEmail(String email) {
-        ResultSet rs = null;
-		try {
-			String sqlQuery = "select * from customer where customer_email = ?";
-			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setString(1,email);
-			
-			rs = ps.executeQuery();
-			
-			while(rs.next()) {
-				int customerId = rs.getInt("customer_id");
-				String emailId = rs.getString("customer_email");
-				String password = rs.getString("customer_password");
-				String name = rs.getString("customer_name");		
-				return new Customer(customerId, emailId, password, name);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-	
-		return null;
-    }
 
 }
