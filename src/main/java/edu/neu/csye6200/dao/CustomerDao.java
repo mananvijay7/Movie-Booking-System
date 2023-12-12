@@ -7,11 +7,13 @@ import edu.neu.csye6200.model.Customer;
 public interface CustomerDao {
 	List<Customer> getAllCustomers();
 
-	Customer getCustomerById(int id);
+    Customer getCustomerById(int id);
 
     void addCustomer(Customer customer);
 
     void updateCustomer(Customer customer);
 
     void deletecustomer(int id);
+    
+    Customer getCustomerByEmail(String email);
 }

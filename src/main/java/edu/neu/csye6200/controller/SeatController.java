@@ -33,7 +33,7 @@ public class SeatController {
     
     public void addSeat(Seat seat) {
     	int seatId = seatDao.addSeat(seat);
-    	List<Integer> shows = showDao.getShowsByScreenId(seat.getScreenId());
+    	List<Integer> shows = showDao.getAllShowsByScreenId(seat.getScreenId());
     	seatAvailabilityDao.addSeatAvailability(seatId, shows);
     }
     /*
@@ -41,10 +41,6 @@ public class SeatController {
      * Add Shows
      * Add Seats  -> Seat Availability gets added
      */
-    
-    public void updateSeat(Seat seat) {
-    	seatDao.updateSeat(seat);
-    }
     
     public void deleteSeat(int seatId, String seatRow) {
     	seatDao.deleteSeat(seatId, seatRow);

@@ -41,22 +41,22 @@ public class MovieDaoImpl implements MovieDao {
 	}
 
 	@Override
-	public Movie getMovieById(int movie_id) {
+	public Movie getMovieByMovieName(String movieName) {
 		ResultSet rs = null;
 		try {
-			String sqlQuery = "select * from movie where movie_id = ?";
+			String sqlQuery = "select * from movie where movie_title = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
-			ps.setInt(1,movie_id);
+			ps.setString(1,movieName);
 			
 			rs = ps.executeQuery();
 			
 			while(rs.next()) {
-				int movieId = rs.getInt("movie_id");
-				String movieTitle = rs.getString("movie_title");
-				String movieDescription = rs.getString("movie_description");
-				String movieGenere = rs.getString("movie_genere");
-				int duration = rs.getInt("duration");			
-				return new Movie(movieId, movieTitle, movieDescription, movieGenere, duration);
+				int movie_id = rs.getInt("movie_id");
+				String movie_title = rs.getString("movie_title");
+				String movie_description = rs.getString("movie_description");
+				String movie_genere = rs.getString("movie_genre");
+				int duration = rs.getInt("movie_duration");
+				return (new Movie(movie_id, movie_title, movie_description, movie_genere, duration));
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();

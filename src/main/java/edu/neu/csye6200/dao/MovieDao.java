@@ -7,7 +7,7 @@ import java.util.List;
 public interface MovieDao {
     List<Movie> getAllMovies();
 
-    Movie getMovieById(int id);
+    Movie getMovieByMovieName(String movieName);
 
     void addMovie(Movie movie);
     

@@ -25,11 +25,8 @@ public class MyAccountFrame extends javax.swing.JFrame {
         this.user = user;
         
         initComponents();
-        
-        this.userFullName = new JLabel();
+        System.out.println("Account: " + user.getName());
         this.userFullName.setText(this.user.getName());
-        
-        this.userEmail = new JLabel();
         this.userEmail.setText(this.user.getEmail());
         
         
@@ -176,11 +173,17 @@ public class MyAccountFrame extends javax.swing.JFrame {
 
     private void editProfileBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_editProfileBtnActionPerformed
         // TODO add your handling code here:
+        EditUserDetails eud = new EditUserDetails(this.user);
+        eud.setVisible(true);
+        this.setVisible(false);
 
     }//GEN-LAST:event_editProfileBtnActionPerformed
 
     private void signUpBtn1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_signUpBtn1ActionPerformed
         // TODO add your handling code here:
+        Dashboard dash = new Dashboard();
+        this.setVisible(false);
+        dash.setVisible(true);
     }//GEN-LAST:event_signUpBtn1ActionPerformed
 
     /**
