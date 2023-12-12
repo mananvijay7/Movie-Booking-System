@@ -4,9 +4,12 @@
  */
 package edu.neu.csye6200.view;
 
+import edu.neu.csye6200.model.Booking;
+import edu.neu.csye6200.model.Customer;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -22,35 +25,48 @@ public class BookingReceiptFrame_New extends javax.swing.JFrame {
      * Creates new form BookingReceiptFrame
      */
     public BookingReceiptFrame_New() {
+                initComponents();
+    }
+    public BookingReceiptFrame_New(Customer user, Booking booking, String movie) {
         initComponents();
+        System.out.println("User");
+        System.out.println("User" + user.getName());
         
+        System.out.println("booking");
+        System.out.println("booking" + booking.getBookingDate());
         Connection con;
-        Statement st;
+        PreparedStatement ps;
         ResultSet rs;
         
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.print("before conn");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/ood_finalproject","root","root");
+            System.out.print("before conn booking Id = " + booking.toString());
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3307/ood_finalproject1","root","root");
            System.out.print("After conn");
-            st = con.createStatement();
-            rs = st.executeQuery("select * from booking");
+            ps = con.prepareStatement("select * from booking b , movie_show ms where b.show_id = ms.show_id and b.customer_id = ? order by booking_date desc");
+            ps.setInt(1, user.getId());
+            rs = ps.executeQuery();
             System.out.print(rs.toString());
-            if(rs.next()){
-                jlabel_custName.setText(rs.getString(1));
-                jLabel_movieName.setText(rs.getString(2));
+            jlabel_custName.setText(user.getName());
+            jLabel_movieName.setText(movie);
+            while(rs.next()){
                 
-                Time showTiming = rs.getTime(3);
-                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm a");
-                String formattedTime = timeFormat.format(showTiming);
-                jlabel_timing.setText(formattedTime);
+                Date movieDateTime = rs.getDate("show_time");
+                Time movieTime = rs.getTime("show_time");
+                Date bookingDate = rs.getDate("booking_Date");
+                Time bookingTime = rs.getTime("booking_Date");
+                int screenNumber = rs.getInt("screen_number");
                 
-                Date showDate = rs.getDate(3);
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                String formattedDate = dateFormat.format(showDate);
-                jlabel_date.setText(formattedDate);
+                System.out.println("\n\nTime Value = " + movieDateTime + "-" + movieTime);
+//                SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm:ss");
+//                String formattedTime = timeFormat.format(movieDateTime);
+                System.out.println("\n\nBooking Date = " + bookingDate+ "-" + bookingTime);
                 
-                jlabel_seatnumber.setText(rs.getString(4));
+                jlabel_timing.setText(movieTime.toString());
+  
+                jlabel_date.setText(bookingDate.toString());
+                
+                jlabel_seatnumber.setText(screenNumber + "");
                 
               //  jlabel_header.setText("<html><div style='text-align: center;'>" + "Dilwale Dulhaniya Le Jayenge" + "</div></html>");
                 jlabel_header.setText("Booking Receipt");

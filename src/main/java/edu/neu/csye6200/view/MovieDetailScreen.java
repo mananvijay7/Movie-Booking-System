@@ -4,15 +4,23 @@
  */
 package edu.neu.csye6200.view;
 
+import edu.neu.csye6200.controller.BookingController;
 import edu.neu.csye6200.controller.ReviewController;
+import edu.neu.csye6200.controller.ShowController;
 import edu.neu.csye6200.controller.TheatreController;
+import edu.neu.csye6200.model.Booking;
+import edu.neu.csye6200.model.Customer;
 import edu.neu.csye6200.model.Movie;
 import edu.neu.csye6200.model.Review;
 import edu.neu.csye6200.model.Theatre;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.imageio.ImageIO;
@@ -29,6 +37,12 @@ public class MovieDetailScreen extends javax.swing.JFrame {
      */
     private Movie movie;
     
+    private String selectedTheatre;
+    private String selectedShow;
+    private int seats;
+    private int showId;
+    private Customer user;
+    public Map<String, Integer> showTimes = new HashMap<>();
     public MovieDetailScreen() {
         initComponents();
         setDetailsOnScreen();
@@ -50,11 +64,28 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         movieDetailsPanel.add(theatreDropdown); // Add theatreDropdown to the movieDetailsPanel
         
         
+        
+        
         //Setting Showtimedropdown to default times
         String[] showtimes = {"- Select -"};
         showTimeDropdown.setModel(new DefaultComboBoxModel<>(showtimes));
         showTimeDropdown.setSelectedIndex(0);
         movieDetailsPanel.add(showTimeDropdown); // Add showTimeDropdown to the movieDetailsPanel
+        
+        ShowController show = new ShowController();
+        
+        String theatreName= theatreDropdown.getSelectedItem().toString();
+
+        Map<Integer, String> theatreVmovieID = show.getShowsOnScreen(theatreName, this.movie.getId());
+        
+        for (Map.Entry<Integer, String> set :
+             theatreVmovieID.entrySet()) {
+ 
+            // Printing all elements of a Map
+            System.out.println(set.getKey() + " = "
+                               + set.getValue());
+        }
+
     }
     
     public void leftSidePanel(){
@@ -69,8 +100,9 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         
     }
 
-    MovieDetailScreen(Movie selectedMovie) {
+    MovieDetailScreen(Movie selectedMovie , Customer user) {
         this.movie = selectedMovie;
+        this.user = user;
         initComponents();
         setDetailsOnScreen();
         leftSidePanel();
@@ -101,8 +133,11 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         theatreDropdown = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jSpinner1 = new javax.swing.JSpinner();
-        jButton1 = new javax.swing.JButton();
+        selectedSeat = new javax.swing.JSpinner();
+        bookTicketBtn = new javax.swing.JButton();
+        setTheatre = new javax.swing.JButton();
+        jButton2 = new javax.swing.JButton();
+        confirmSeatsBtn = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -200,7 +235,7 @@ public class MovieDetailScreen extends javax.swing.JFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel8)
                     .addComponent(movieReview))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 142, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(79, 79, 79))
         );
@@ -228,12 +263,39 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         jLabel3.setFont(new java.awt.Font("Roboto", 0, 12)); // NOI18N
         jLabel3.setText("Select Seats");
 
-        jButton1.setBackground(new java.awt.Color(7, 59, 76));
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Book Tickets");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bookTicketBtn.setBackground(new java.awt.Color(7, 59, 76));
+        bookTicketBtn.setForeground(new java.awt.Color(255, 255, 255));
+        bookTicketBtn.setText("Book Tickets");
+        bookTicketBtn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bookTicketBtnActionPerformed(evt);
+            }
+        });
+
+        setTheatre.setBackground(new java.awt.Color(7, 59, 76));
+        setTheatre.setForeground(new java.awt.Color(255, 255, 255));
+        setTheatre.setText("Confirm Theatre");
+        setTheatre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                setTheatreActionPerformed(evt);
+            }
+        });
+
+        jButton2.setBackground(new java.awt.Color(7, 59, 76));
+        jButton2.setForeground(new java.awt.Color(255, 255, 255));
+        jButton2.setText("Confirm Show");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        confirmSeatsBtn.setBackground(new java.awt.Color(7, 59, 76));
+        confirmSeatsBtn.setForeground(new java.awt.Color(255, 255, 255));
+        confirmSeatsBtn.setText("Confirm Seats");
+        confirmSeatsBtn.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                confirmSeatsBtnActionPerformed(evt);
             }
         });
 
@@ -249,11 +311,14 @@ public class MovieDetailScreen extends javax.swing.JFrame {
                     .addGroup(movieDetailsPanelLayout.createSequentialGroup()
                         .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addComponent(jButton1)
+                        .addComponent(selectedSeat, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bookTicketBtn)
                     .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(theatreDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(setTheatre)
+                    .addComponent(jButton2)
+                    .addComponent(confirmSeatsBtn))
                 .addContainerGap(143, Short.MAX_VALUE))
         );
         movieDetailsPanelLayout.setVerticalGroup(
@@ -264,17 +329,23 @@ public class MovieDetailScreen extends javax.swing.JFrame {
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(theatreDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(80, 80, 80)
+                .addGap(43, 43, 43)
+                .addComponent(setTheatre)
+                .addGap(55, 55, 55)
                 .addComponent(jLabel1)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(showTimeDropdown, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(84, 84, 84)
+                .addGap(74, 74, 74)
+                .addComponent(jButton2)
+                .addGap(53, 53, 53)
                 .addGroup(movieDetailsPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jSpinner1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(93, 93, 93)
-                .addComponent(jButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(selectedSeat, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addComponent(confirmSeatsBtn)
+                .addGap(39, 39, 39)
+                .addComponent(bookTicketBtn)
+                .addContainerGap(91, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -299,9 +370,79 @@ public class MovieDetailScreen extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_theatreDropdownActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void bookTicketBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bookTicketBtnActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+        int showID = this.showId;
+        Date booking = new Date();
+        
+        Booking book = new Booking(showID, booking, user.getId());
+        
+        BookingController bookCon = new BookingController();
+        
+        bookCon.addBooking(book, seats);
+        
+        BookingReceiptFrame_New re = new BookingReceiptFrame_New(this.user, book, this.movie.getTitle());
+        this.setVisible(false);
+        re.setVisible(true);
+        
+        
+    }//GEN-LAST:event_bookTicketBtnActionPerformed
+
+    private void setTheatreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_setTheatreActionPerformed
+        // TODO add your handling code here:
+        ShowController show = new ShowController();
+        
+        String theatreName= theatreDropdown.getSelectedItem().toString();
+
+        this.selectedTheatre = theatreName;
+        
+        Map<Integer, String> theatreVmovieID = show.getShowsOnScreen(theatreName, this.movie.getId());
+        
+        Map<String, Integer> showTimes = new HashMap<>();
+        List<String> li = new ArrayList<>();
+        for (Map.Entry<Integer, String> set :
+             theatreVmovieID.entrySet()) {
+            // Printing all elements of a Map
+            System.out.println(set.getKey() + " = "
+                               + set.getValue());
+
+            this.showTimes.put(set.getValue(), set.getKey());
+            li.add(set.getValue());
+            
+        }
+        
+        String[] showtimeArr = li.toArray(new String[0]);
+        
+        showTimeDropdown.setModel(new DefaultComboBoxModel<>(showtimeArr));
+    }//GEN-LAST:event_setTheatreActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+            String showTime = showTimeDropdown.getSelectedItem().toString();
+            
+            String[] tmp = showTime.split("=");
+            for (Map.Entry<String, Integer> set :
+             this.showTimes.entrySet()) {
+            // Printing all elements of a Map
+            System.out.println(set.getKey() + " = "
+                               + set.getValue());
+
+        }
+
+            System.out.print("showId:" + showTime);
+
+            this.showId = showTimes.get(showTime);
+            System.out.println("showId:" + this.showId);
+    }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void confirmSeatsBtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_confirmSeatsBtnActionPerformed
+        // TODO add your handling code here:
+        
+        System.out.println("sasd" + selectedSeat.getValue());
+        String value = selectedSeat.getValue().toString();
+        System.out.println("sasd>  " + value);
+        this.seats = Integer.parseInt(value);
+        
+    }//GEN-LAST:event_confirmSeatsBtnActionPerformed
 
     /**
      * @param args the command line arguments
@@ -340,7 +481,9 @@ public class MovieDetailScreen extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton jButton1;
+    private javax.swing.JButton bookTicketBtn;
+    private javax.swing.JButton confirmSeatsBtn;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -350,12 +493,13 @@ public class MovieDetailScreen extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JSpinner jSpinner1;
     private javax.swing.JPanel movieDetailsPanel;
     private javax.swing.JLabel movieDuration;
     private javax.swing.JLabel movieGenre;
     private javax.swing.JLabel movieName;
     private javax.swing.JLabel movieReview;
+    private javax.swing.JSpinner selectedSeat;
+    private javax.swing.JButton setTheatre;
     private javax.swing.JComboBox<String> showTimeDropdown;
     private javax.swing.JComboBox<String> theatreDropdown;
     // End of variables declaration//GEN-END:variables

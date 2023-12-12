@@ -92,7 +92,7 @@ public class ShowDaoImpl implements ShowDao {
 		ResultSet rs = null;
 		try {
 			
-			String sqlQuery = "SELECT DISTINCT show_Id, showTime FROM movie_show WHERE screen_Number = ? and movie_Id = ?";
+			String sqlQuery = "SELECT DISTINCT show_Id, show_Time FROM movie_show WHERE screen_Number = ? and movie_Id = ?";
 			PreparedStatement ps = connection.prepareStatement(sqlQuery);
 			ps.setInt(2, movieId);
 			for (int screenId: screens) {
@@ -100,7 +100,7 @@ public class ShowDaoImpl implements ShowDao {
 				rs = ps.executeQuery();
 				while (rs.next()) {
 					int showId = rs.getInt("show_Id");
-					String showTime = rs.getString("showTime");
+					String showTime = rs.getString("show_Time");
 					shows.put(showId, showTime);
 				}
 			}	

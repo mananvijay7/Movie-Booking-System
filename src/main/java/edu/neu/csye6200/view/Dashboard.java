@@ -333,7 +333,7 @@ public class Dashboard extends javax.swing.JFrame {
     public void bookNowBtnAction(String movie) {
         MovieController movieCon = new MovieController();
         Movie selectedMovie = movieCon.getMovieByName(movie);
-        MovieDetailScreen mds = new MovieDetailScreen(selectedMovie);
+        MovieDetailScreen mds = new MovieDetailScreen(selectedMovie, this.user);
         this.setVisible(false);
         mds.setVisible(true);
     }
