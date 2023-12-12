@@ -25,13 +25,21 @@ Facilitates booking seats for movie shows.
 #### Movie Information: 
 Manages movie details, including schedules, genres, and ratings.
 #### Customer Reviews: 
-Allows customers to review and rate movies.
+Allows customers to review the movie.
 #### Theater Layout Management: 
 Administers screens, seats, and showtimes within a theater.
 
 ### Usage
 #### Installation:
 Details about how to set up and run the application.
+
+1) Download and install netbeans and mysql workbench
+2) To create the database and populate the tables use CSV files present under src folder
+3) Update the connection details in the connection file in the Properties folder (Maintain the format from the current file)
+4) Manually install the JDBC dependency in netbeans(mysql-connector-j-8.2.0) if the depenedencies do not work directly from pom.xml
+5) Run the code directly from netbeans.
+
+
 #### Software Dependencies: 
 Eclipse, NetBeans, MySQL.
 #### Configuration:
@@ -54,4 +62,7 @@ Inheritance, Polymorphism, Abstraction, Encapsulation, CSV File IO, Inner classe
 ##### - Anoushka Bansal: Controller classes
 ##### - Tejas Vasisht: View Classes
 ##### - Kevin Rodrigues: View classes
+
+
+
 
