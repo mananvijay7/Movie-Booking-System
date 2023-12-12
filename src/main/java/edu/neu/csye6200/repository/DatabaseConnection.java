@@ -22,7 +22,7 @@ public class DatabaseConnection {
        
         Connection connection = null;
         try {
-             /*FileReader fileReader = new FileReader(dbFileName);
+             FileReader fileReader = new FileReader(dbFileName);
              BufferedReader br = new BufferedReader(fileReader);
              String fileLine = br.readLine();
              while(fileLine != null) {
@@ -37,7 +37,7 @@ public class DatabaseConnection {
             	 }
             	 
             	 fileLine = br.readLine();
-             }*/
+             }
             // Load the JDBC driver
             Class.forName("com.mysql.cj.jdbc.Driver");
 
@@ -54,7 +54,7 @@ public class DatabaseConnection {
             
             // Close the connection
             
-        } catch (ClassNotFoundException | SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 		return connection;
